@@ -65,7 +65,7 @@ describe('Boards suite', () => {
     });
   });
 
-  describe('POST', () => {
+  describe.skip('POST', () => {
     it('should create board successfully', async () => {
       await request
         .post(routes.boards.create)
@@ -80,7 +80,7 @@ describe('Boards suite', () => {
     });
   });
 
-  describe('PUT', () => {
+  describe.skip('PUT', () => {
     it('should update board successfully', async () => {
       // Setup
       let boardToUpdate;
@@ -118,7 +118,7 @@ describe('Boards suite', () => {
     });
   });
 
-  describe('DELETE', () => {
+  describe.skip('DELETE', () => {
     it('should delete board successfully', async () => {
       let boardId;
       // Setup

@@ -115,7 +115,7 @@ describe('Users suite', () => {
     });
   });
 
-  describe('DELETE', () => {
+  describe.skip('DELETE', () => {
     it('should delete user successfully', async () => {
       // Setup:
       const userResponse = await request

@@ -22,7 +22,7 @@ const TEST_BOARD_DATA = {
   ]
 };
 
-describe('Tasks suite', () => {
+describe.skip('Tasks suite', () => {
   let request = unauthorizedRequest;
   let testTaskId;
   let testBoardId;
