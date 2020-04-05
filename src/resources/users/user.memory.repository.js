@@ -1,7 +1,6 @@
 const User = require('./user.model');
 
 const users = [];
-users.push(new User());
 
 const getAll = async () => {
   return users;
@@ -28,9 +27,15 @@ const updateUser = async userUpdated => {
   return users[i];
 };
 
+const deleteUser = async id => {
+  const i = users.findIndex(user => user.id === id);
+  users.splice(i, 1);
+};
+
 module.exports = {
   getAll,
   getById,
   createUser,
-  updateUser
+  updateUser,
+  deleteUser
 };

@@ -1,8 +1,6 @@
-const { Board, Column } = require('./board.model');
+const { Board } = require('./board.model');
 
 const boards = [];
-boards.push(new Board());
-boards[0].columns.push(new Column());
 
 const getAll = async () => {
   return boards;
@@ -28,9 +26,15 @@ const updateBoard = async boardUpdated => {
   return boards[i];
 };
 
+const deleteBoard = async boardId => {
+  const i = boards.findIndex(board => board.id === boardId);
+  boards.splice(i, 1);
+};
+
 module.exports = {
   getAll,
   getById,
   createBoard,
-  updateBoard
+  updateBoard,
+  deleteBoard
 };

@@ -13,7 +13,11 @@ router.route('/:id').get(async (req, res) => {
   if (id) {
     const board = await boardService.getById(id);
 
-    res.json(board);
+    if (board) {
+      res.json(board);
+    } else {
+      res.status(404).json(null);
+    }
   }
 });
 
@@ -33,7 +37,11 @@ router.route('/:id').put(async (req, res) => {
 });
 
 router.route('/:id').delete(async (req, res) => {
-  res.json('');
+  const id = req.params.id;
+
+  await boardService.deleteBoard(id);
+
+  res.json(null);
 });
 
 module.exports = router;

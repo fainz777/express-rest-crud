@@ -34,7 +34,10 @@ router.route('/:id').put(async (req, res) => {
 });
 
 router.route('/:id').delete(async (req, res) => {
-  res.json('');
+  const id = req.params.id;
+  await usersService.deleteUser(id);
+
+  res.status(200).json(null);
 });
 
 module.exports = router;
