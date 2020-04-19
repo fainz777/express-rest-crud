@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const Board = require('./board.model');
 const boardService = require('./board.service');
 const catchErrors = require('../../services/catchErrors');
 
@@ -6,7 +7,7 @@ router.route('/').get(
   catchErrors(async (req, res) => {
     const boards = await boardService.getAll();
 
-    res.json(boards);
+    res.json(boards.map(Board.toResponse));
   })
 );
 
@@ -16,9 +17,8 @@ router.route('/:id').get(
 
     if (id) {
       const board = await boardService.getById(id);
-
       if (board) {
-        res.json(board);
+        res.json(Board.toResponse(board));
       } else {
         res.status(404).json(null);
       }
@@ -31,7 +31,7 @@ router.route('/').post(
     const board = req.body;
     const boardCreated = await boardService.createBoard(board);
 
-    res.json(boardCreated);
+    res.json(Board.toResponse(boardCreated));
   })
 );
 
@@ -41,7 +41,7 @@ router.route('/:id').put(
 
     const boardUpdated = await boardService.updateBoard(board);
 
-    res.json(boardUpdated);
+    res.json(Board.toResponse(boardUpdated));
   })
 );
 
