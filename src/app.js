@@ -13,35 +13,42 @@ const loggerService = new LoggerService();
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 
-app.use(express.json());
+const connectDb = require('./db/db.connector.js');
 
-app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+connectDb(() => {
+  app.use(express.json());
 
-app.use('/', (req, res, next) => {
-  if (req.originalUrl === '/') {
-    res.send('Service is running!');
-    return;
-  }
-  next();
+  app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+
+  app.use('/', (req, res, next) => {
+    if (req.originalUrl === '/') {
+      res.send('Service is running!');
+      return;
+    }
+    next();
+  });
+
+  app.use(logger);
+
+  app.use('/users', userRouter);
+  app.use('/boards', borderRouter);
+  app.use('/boards', taskRouter);
+
+  app.use(errorHandler);
+
+  process.on('uncaughtException', err => {
+    loggerService.error(
+      500,
+      `Uncaught Exception: ${err.message}, ${err.stack}`
+    );
+  });
+
+  process.on('unhandledRejection', (reason, promise) => {
+    loggerService.error(500, `Unhandled Rejection: ${promise} / ${reason}`);
+  });
+
+  // throw Error('Oops!');
+  // Promise.reject(Error('Oops!'));
 });
-
-app.use(logger);
-
-app.use('/users', userRouter);
-app.use('/boards', borderRouter);
-app.use('/boards', taskRouter);
-
-app.use(errorHandler);
-
-process.on('uncaughtException', err => {
-  loggerService.error(500, `Uncaught Exception: ${err.message}, ${err.stack}`);
-});
-
-process.on('unhandledRejection', (reason, promise) => {
-  loggerService.error(500, `Unhandled Rejection: ${promise} / ${reason}`);
-});
-
-// throw Error('Oops!');
-// Promise.reject(Error('Oops!'));
 
 module.exports = app;

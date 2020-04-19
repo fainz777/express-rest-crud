@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const Task = require('./task.model');
 const taskService = require('./task.service');
 const catchErrors = require('../../services/catchErrors');
 
@@ -7,7 +8,7 @@ router.route('/:boardId/tasks').get(
     const boardId = req.params.boardId;
     const tasks = await taskService.getAll(boardId);
 
-    res.json(tasks);
+    res.json(tasks.map(Task.toResponse));
   })
 );
 
@@ -19,7 +20,7 @@ router.route('/:boardId/tasks/:taskId').get(
     const task = await taskService.getById(boardId, taskId);
 
     if (task) {
-      res.json(task);
+      res.json(Task.toResponse(task));
     } else {
       res.status(404).json(null);
     }
@@ -32,7 +33,7 @@ router.route('/:boardId/tasks').post(
     const task = req.body;
     const taskCreated = await taskService.createTask(boardId, task);
 
-    res.json(taskCreated);
+    res.json(Task.toResponse(taskCreated));
   })
 );
 
@@ -44,7 +45,7 @@ router.route('/:boardId/tasks/:taskId').put(
 
     const taskUpdated = await taskService.updateTask(boardId, taskId, task);
 
-    res.json(taskUpdated);
+    res.json(Task.toResponse(taskUpdated));
   })
 );
 

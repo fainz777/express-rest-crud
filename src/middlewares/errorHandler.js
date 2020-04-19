@@ -2,7 +2,6 @@ const LoggerService = require('../services/loggerService');
 const loggerService = new LoggerService();
 
 function errorHandler(err, req, res, next) {
-  console.log('errorHandler');
   if (err) {
     loggerService.error(500, err.message, err.stack);
     res.status(500).json({
