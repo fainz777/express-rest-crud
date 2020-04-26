@@ -9,7 +9,6 @@ const getById = async id => {
 };
 
 const createBoard = async board => {
-  console.log('createBoard board: ', board);
   const boardCreated = new Board({ ...board });
 
   return await boardCreated.save();
