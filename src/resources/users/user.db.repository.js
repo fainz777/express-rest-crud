@@ -1,3 +1,5 @@
+const { BCRYPT_ROUNDS } = require('../../common/config');
+const bcrypt = require('bcrypt');
 const User = require('./user.model');
 
 const getAll = async () => {
@@ -8,10 +10,24 @@ const getById = async id => {
   return await User.findById(id);
 };
 
-const createUser = async user => {
-  const userCreated = new User({ ...user });
+const getByLogin = async login => {
+  return await User.findOne({ login });
+};
 
-  return await userCreated.save();
+const createUser = async user => {
+  await bcrypt.hash(
+    user.password,
+    parseInt(BCRYPT_ROUNDS, 10),
+    async (err, hash) => {
+      if (err) {
+        throw new Error('Something went wrong');
+      }
+      user.password = hash;
+      const userCreated = new User({ ...user });
+
+      return await userCreated.save();
+    }
+  );
 };
 
 const updateUser = async userUpdated => {
@@ -25,6 +41,7 @@ const deleteUser = async id => {
 module.exports = {
   getAll,
   getById,
+  getByLogin,
   createUser,
   updateUser,
   deleteUser
